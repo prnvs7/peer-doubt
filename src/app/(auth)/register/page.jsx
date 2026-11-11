@@ -10,14 +10,19 @@ export default function Register() {
 
     async function onSubmit(e) {
         e.preventDefault();
-        const res = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
-        });
-        const data = await res.json();
-        if (!res.ok) return setError(data.msg);
-        router.push('/login');
+        setError('');
+        try {
+            const res = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(form),
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) return setError(data.msg || `Server error (${res.status})`);
+            router.push('/login');
+        } catch {
+            setError('Could not reach the server');
+        }
     }
 
     const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
