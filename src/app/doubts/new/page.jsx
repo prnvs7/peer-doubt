@@ -15,12 +15,17 @@ export default function NewDoubt() {
 
     // Debounced similar-doubt search
     useEffect(() => {
-        if (form.title.trim().length < 3) return setSimilar([]);
+        if (form.title.trim().length < 3) return;
+
+        let cancelled = false;
         const t = setTimeout(async () => {
             const res = await fetch(`/api/doubts/similar?q=${encodeURIComponent(form.title)}`);
-            if (res.ok) setSimilar(await res.json());
+            if (res.ok && !cancelled) setSimilar(await res.json());
         }, 500);
-        return () => clearTimeout(t);
+        return () => {
+            cancelled = true;
+            clearTimeout(t);
+        };
     }, [form.title]);
 
     async function onSubmit(e) {
@@ -38,7 +43,11 @@ export default function NewDoubt() {
         router.push(`/doubts/${data._id}`);
     }
 
-    const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+    const set = (k) => (e) => {
+        const value = e.target.value;
+        setForm((current) => ({ ...current, [k]: value }));
+        if (k === 'title') setSimilar([]);
+    };
 
     return (
         <form onSubmit={onSubmit} className="space-y-3">

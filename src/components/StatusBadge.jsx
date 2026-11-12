@@ -1,16 +1,22 @@
-const COLORS = {
-    OPEN: 'bg-yellow-100 text-yellow-800',
-    CLAIMED: 'bg-blue-100 text-blue-800',
-    ANSWERED: 'bg-purple-100 text-purple-800',
-    VERIFIED: 'bg-green-100 text-green-800',
-    DUPLICATE: 'bg-gray-200 text-gray-700',
-    REJECTED: 'bg-red-100 text-red-800',
+const MAP = {
+    OPEN: { label: 'Open', cls: 'bg-marker/70 text-ink' },
+    CLAIMED: { label: 'Being answered', cls: 'bg-pencil/10 text-pencil' },
+    ANSWERED: { label: 'Answered', cls: 'bg-ink/10 text-ink' },
+    VERIFIED: { label: 'Verified', cls: 'bg-verified/10 text-verified' },
+    DUPLICATE: { label: 'Duplicate', cls: 'bg-rule text-graphite' },
+    REJECTED: { label: 'Rejected', cls: 'bg-margin/10 text-margin' },
 };
 
 export default function StatusBadge({ status }) {
+    const s = MAP[status] ?? MAP.OPEN;
     return (
-        <span className={`text-xs px-2 py-1 rounded-full font-medium ${COLORS[status]}`}>
-            {status}
+        <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded px-2 py-0.5 text-xs font-medium ${s.cls}`}>
+            {status === 'VERIFIED' && (
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            )}
+            {s.label}
         </span>
     );
 }

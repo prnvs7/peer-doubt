@@ -1,26 +1,51 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: #1b2540;
+  --color-paper: #f3f5f9;
+  --color-sheet: #ffffff;
+  --color-graphite: #5a6378;
+  --color-rule: #dce1ea;
+  --color-margin: #c8414b;
+  --color-marker: #f7e36b;
+  --color-pencil: #3c5fa8;
+  --color-verified: #2e7d5b;
+  --font-sans: var(--font-ui), system-ui, sans-serif;
+  --font-serif: var(--font-read), Georgia, serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+@layer components {
+  .field {
+    @apply w-full rounded-md border border-rule bg-white px-3 py-2 text-[15px] outline-none transition placeholder:text-graphite/60 focus:border-pencil focus:ring-2 focus:ring-pencil/25;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md bg-ink px-4 py-2 text-[15px] font-medium text-white transition hover:bg-ink/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-pencil disabled:opacity-50;
+  }
+
+  .btn-quiet {
+    @apply inline-flex items-center justify-center rounded-md border border-rule bg-white px-4 py-2 text-[15px] font-medium transition hover:border-graphite;
+  }
+
+  /* notebook sheet with a red margin line */
+  .margin-sheet {
+    background-color: #fff;
+    background-image: linear-gradient(to right,
+        transparent 2.75rem,
+        rgb(200 65 75 / 0.55) 2.75rem,
+        rgb(200 65 75 / 0.55) calc(2.75rem + 1px),
+        transparent calc(2.75rem + 1px));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
 }
