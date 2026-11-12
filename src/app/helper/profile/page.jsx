@@ -9,7 +9,10 @@ export default function HelperProfile() {
     const [error, setError] = useState('');
 
     useEffect(() => {
-        fetch('/api/users/helper-profile').then((r) => r.json()).then(setProfile);
+        fetch('/api/users/helper-profile')
+            .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+            .then(setProfile)
+            .catch(() => setError('Could not load your profile. Try refreshing the page.'));
     }, []);
 
     if (!profile) return <p className="text-graphite">Loading...</p>;
