@@ -6,6 +6,7 @@ import { useSession, signOut } from 'next-auth/react';
 const LINKS = [
     { href: '/doubts/mine', label: 'My doubts' },
     { href: '/doubts/new', label: 'Ask a doubt' },
+    { href: '/helper', label: 'Help others' },
 ];
 
 export default function Navbar() {
@@ -28,8 +29,8 @@ export default function Navbar() {
                                     key={l.href}
                                     href={l.href}
                                     className={`flex items-center border-b-2 ${pathname === l.href
-                                            ? 'border-ink font-medium'
-                                            : 'border-transparent text-graphite hover:text-ink'
+                                        ? 'border-ink font-medium'
+                                        : 'border-transparent text-graphite hover:text-ink'
                                         }`}
                                 >
                                     {l.label}
