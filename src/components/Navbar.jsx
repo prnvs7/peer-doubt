@@ -50,7 +50,7 @@ export default function Navbar() {
                 ) : (
                     <div className="ml-auto flex items-center gap-3 text-[15px]">
                         <Link href="/login" className="hover:underline underline-offset-4">Log in</Link>
-                        <Link href="/register" className="btn">Create account</Link>
+                        <Link href="/register" className="btn-primary">Create account</Link>
                     </div>
                 )}
             </nav>

@@ -26,8 +26,10 @@ export default function Login() {
 
     return (
         <AuthShell
-            title="Log in"
+            title="Welcome back"
             hint="Pick up where your doubts left off."
+            eyebrow="Return to your class"
+            callout="Your open doubts and saved answers are waiting."
             footer={<>New here? <Link href="/register" className="underline underline-offset-4">Create an account</Link></>}
         >
             <form onSubmit={onSubmit} className="space-y-4">
