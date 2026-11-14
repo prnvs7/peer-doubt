@@ -10,20 +10,35 @@ export const authOptions = {
         CredentialsProvider({
             credentials: { email: {}, password: {} },
             async authorize(credentials) {
-                await connectDB();
-                const user = await User.findOne({ email: credentials?.email?.toLowerCase() });
-                if (!user) return null;
-                const ok = await bcrypt.compare(credentials.password, user.passwordHash);
+                const email = credentials?.email?.trim().toLowerCase();
+                const password = credentials?.password;
+                if (!email || typeof password !== 'string' || !password) return null;
+                try {
+                    await connectDB();
+                } catch (error) {
+                    console.error('AUTH_DATABASE_UNAVAILABLE', {
+                        name: error?.name || 'Error',
+                        code: error?.code || error?.cause?.code || 'UNKNOWN',
+                    });
+                    throw new Error('Authentication database unavailable');
+                }
+                const user = await User.findOne({ email });
+                if (!user?.passwordHash || user.isSuspended) return null;
+                const ok = await bcrypt.compare(password, user.passwordHash);
                 if (!ok) return null;
                 return { id: user._id.toString(), name: user.name, email: user.email, roles: user.roles };
             },
         }),
     ],
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger }) {
             if (user) {
                 token.id = user.id;
                 token.roles = user.roles;
+            } else if (trigger === 'update' && token.id) {
+                await connectDB();
+                const currentUser = await User.findById(token.id).select('roles').lean();
+                if (currentUser) token.roles = currentUser.roles || [];
             }
             return token;
         },

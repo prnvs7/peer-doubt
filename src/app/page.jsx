@@ -1,8 +1,11 @@
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import StatusTimeline from '@/components/StatusTimeline';
+
+import StatusTimeline from '@/components/StatusTimeLine';
+
 import StatusBadge from '@/components/StatusBadge';
 
 const PROBLEMS = [
@@ -67,7 +70,7 @@ const LIBRARY = [
     { title: 'Why does 3NF still allow some redundancy?', meta: 'Normalization in DBMS' },
 ];
 
-export default async function Landing() {
+async function LandingContent() {
     const session = await getServerSession(authOptions);
     if (session) redirect('/doubts/mine');
 
@@ -225,4 +228,8 @@ export default async function Landing() {
             </footer>
         </>
     );
+}
+
+export default function Landing() {
+    return <Suspense fallback={<div className="min-h-[60vh] animate-pulse bg-sheet" aria-label="Loading Peer Doubt" />}><LandingContent /></Suspense>;
 }

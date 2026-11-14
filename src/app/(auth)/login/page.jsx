@@ -15,11 +15,21 @@ export default function Login() {
         e.preventDefault();
         setError('');
         setLoading(true);
-        const res = await signIn('credentials', { ...form, redirect: false });
-        setLoading(false);
-        if (res?.error) return setError('Email or password is incorrect.');
-        router.push('/doubts/mine');
-        router.refresh();
+        try {
+            const res = await signIn('credentials', { ...form, redirect: false });
+            if (res?.error) {
+                setError(res.error === 'CredentialsSignin'
+                    ? 'Email or password is incorrect.'
+                    : 'Sign-in is temporarily unavailable. Check your connection and try again shortly.');
+                return;
+            }
+            router.push('/doubts/mine');
+            router.refresh();
+        } catch {
+            setError('Could not reach the sign-in service. Check your connection and try again.');
+        } finally {
+            setLoading(false);
+        }
     }
 
     const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });

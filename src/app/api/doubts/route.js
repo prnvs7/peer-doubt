@@ -9,6 +9,10 @@ const schema = z.object({
     description: z.string().min(10).max(5000),
     course: z.string(),
     topic: z.string(),
+    tags: z.array(z.string().trim().min(1).max(40)).max(8).optional().default([])
+        .refine((tags) => new Set(tags.map((tag) => tag.toLowerCase())).size === tags.length, {
+            message: 'Tags must be unique',
+        }),
     isAnonymous: z.boolean().optional(),
 });
 
@@ -16,7 +20,13 @@ export async function POST(req) {
     const { session, error, status } = await requireRole();
     if (error) return Response.json({ msg: error }, { status });
 
-    const parsed = schema.safeParse(await req.json());
+    let body;
+    try {
+        body = await req.json();
+    } catch {
+        return Response.json({ msg: 'Request body must be valid JSON' }, { status: 400 });
+    }
+    const parsed = schema.safeParse(body);
     if (!parsed.success)
         return Response.json({ msg: parsed.error.issues[0].message }, { status: 400 });
 

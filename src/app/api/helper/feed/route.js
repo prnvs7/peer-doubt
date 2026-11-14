@@ -4,7 +4,7 @@ import Doubt from '@/models/Doubt';
 import { requireRole } from '@/lib/session';
 
 export async function GET() {
-    const { session, error, status } = await requireRole();
+    const { session, error, status } = await requireRole('helper');
     if (error) return Response.json({ msg: error }, { status });
 
     await connectDB();
@@ -15,6 +15,7 @@ export async function GET() {
 
     const doubts = await Doubt.find({
         status: 'OPEN',
+        flaggedForReview: { $ne: true },
         course: { $in: profile.courses },
         author: { $ne: session.user.id },
     })

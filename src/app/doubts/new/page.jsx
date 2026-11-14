@@ -7,7 +7,7 @@ import { COURSES } from '@/lib/courses';
 export default function NewDoubt() {
     const router = useRouter();
     const [form, setForm] = useState({
-        title: '', description: '', course: '', topic: '', isAnonymous: false,
+        title: '', description: '', course: '', topic: '', tags: '', isAnonymous: false,
     });
     const [similar, setSimilar] = useState([]);
     const [error, setError] = useState('');
@@ -15,18 +15,22 @@ export default function NewDoubt() {
 
     // Debounced similar-doubt search
     useEffect(() => {
-        if (form.title.trim().length < 3) return;
+        const q = `${form.title} ${form.description}`.trim().slice(0, 250);
+        if (q.length < 3) return;
 
         let cancelled = false;
         const t = setTimeout(async () => {
-            const res = await fetch(`/api/doubts/similar?q=${encodeURIComponent(form.title)}`);
+            const params = new URLSearchParams({ q });
+            if (form.course) params.set('course', form.course);
+            if (form.topic) params.set('topic', form.topic);
+            const res = await fetch(`/api/doubts/similar?${params}`);
             if (res.ok && !cancelled) setSimilar(await res.json());
         }, 500);
         return () => {
             cancelled = true;
             clearTimeout(t);
         };
-    }, [form.title]);
+    }, [form.title, form.description, form.course, form.topic]);
 
     async function onSubmit(e) {
         e.preventDefault();
@@ -35,7 +39,10 @@ export default function NewDoubt() {
         const res = await fetch('/api/doubts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(form),
+            body: JSON.stringify({
+                ...form,
+                tags: form.tags.split(',').map((tag) => tag.trim()).filter(Boolean),
+            }),
         });
         const data = await res.json();
         setLoading(false);
@@ -46,54 +53,61 @@ export default function NewDoubt() {
     const set = (k) => (e) => {
         const value = e.target.value;
         setForm((current) => ({ ...current, [k]: value }));
-        if (k === 'title') setSimilar([]);
+        if (['title', 'description', 'course', 'topic'].includes(k)) setSimilar([]);
     };
 
     return (
-        <form onSubmit={onSubmit} className="space-y-3">
-            <h1 className="text-2xl font-semibold">Ask a doubt</h1>
-            {error && <p className="text-red-600 text-sm">{error}</p>}
+        <form onSubmit={onSubmit} className="card mx-auto max-w-3xl space-y-5 p-5 sm:p-8">
+            <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-pencil">Ask the class</p><h1 className="mt-1 text-2xl font-bold tracking-tight">What are you stuck on?</h1><p className="mt-2 text-sm leading-6 text-graphite">Add enough detail for a classmate to understand where you need help.</p></div>
+            {error && <p role="alert" className="rounded-lg bg-margin/10 p-3 text-sm text-margin">{error}</p>}
 
-            <div className="flex gap-3">
-                <select className="border p-2 rounded flex-1" value={form.course} required
-                    onChange={(e) => setForm({ ...form, course: e.target.value, topic: '' })}>
+            <div className="grid gap-3 sm:grid-cols-2">
+                <label className="space-y-1.5 text-sm font-semibold">Course<select className="field mt-1.5" value={form.course} required
+                    onChange={(e) => { setForm({ ...form, course: e.target.value, topic: '' }); setSimilar([]); }}>
                     <option value="">Course</option>
                     {Object.keys(COURSES).map((c) => <option key={c}>{c}</option>)}
-                </select>
-                <select className="border p-2 rounded flex-1" value={form.topic} required
+                </select></label>
+                <label className="space-y-1.5 text-sm font-semibold">Topic<select className="field mt-1.5" value={form.topic} required
                     onChange={set('topic')} disabled={!form.course}>
                     <option value="">Topic</option>
                     {(COURSES[form.course] || []).map((t) => <option key={t}>{t}</option>)}
-                </select>
+                </select></label>
             </div>
 
-            <input className="w-full border p-2 rounded" placeholder="Doubt title (short)"
+            <label className="block space-y-1.5 text-sm font-semibold">Short title<input className="field" placeholder="e.g. Why does Dijkstra fail with negative edges?" maxLength={150}
                 value={form.title} onChange={set('title')} required />
+            </label>
 
             {similar.length > 0 && (
-                <div className="bg-yellow-50 border border-yellow-300 rounded p-3 text-sm">
-                    <p className="font-medium mb-1">Similar doubts already exist. Check these first:</p>
-                    <ul className="list-disc ml-5">
+                <div className="rounded-xl border border-pencil/30 bg-marker/50 p-4 text-sm">
+                    <p className="mb-2 font-medium">Similar doubts already exist. Check these first:</p>
+                    <ul className="space-y-2">
                         {similar.map((d) => (
                             <li key={d._id}>
-                                <Link href={`/doubts/${d._id}`} target="_blank" className="underline">{d.title}</Link>
-                                <span className="text-gray-500"> ({d.status})</span>
+                                <Link href={`/doubts/${d._id}`} target="_blank" className="font-semibold text-pencil underline underline-offset-2">{d.title}</Link>
+                                <span className="text-graphite"> · {d.status}</span>
                             </li>
                         ))}
                     </ul>
                 </div>
             )}
 
-            <textarea className="w-full border p-2 rounded h-40" placeholder="Explain your doubt in detail"
+            <label className="block space-y-1.5 text-sm font-semibold">Explain the question<textarea className="field min-h-40 resize-y" maxLength={5000} placeholder="What have you tried? Where does the explanation stop making sense?"
                 value={form.description} onChange={set('description')} required />
+            </label>
 
-            <label className="flex items-center gap-2 text-sm">
-                <input type="checkbox" checked={form.isAnonymous}
+            <label className="block space-y-1.5 text-sm font-semibold">Tags
+                <input className="field" placeholder="Deadlock, resource allocation" value={form.tags} onChange={set('tags')} />
+                <span className="block text-xs font-normal text-graphite">Separate up to 8 tags with commas.</span>
+            </label>
+
+            <label className="flex items-center gap-2 text-sm text-graphite">
+                <input className="h-4 w-4 accent-pencil" type="checkbox" checked={form.isAnonymous}
                     onChange={(e) => setForm({ ...form, isAnonymous: e.target.checked })} />
                 Post anonymously
             </label>
 
-            <button disabled={loading} className="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50">
+            <button disabled={loading} className="btn-primary">
                 {loading ? 'Submitting...' : 'Submit doubt'}
             </button>
         </form>
