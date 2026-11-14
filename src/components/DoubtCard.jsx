@@ -7,13 +7,13 @@ export default function DoubtCard({ doubt }) {
     });
 
     return (
-        <li className="border-b border-rule">
+        <li className="card overflow-hidden transition hover:border-pencil/50 hover:shadow-sm">
             <Link
                 href={`/doubts/${doubt._id}`}
-                className="flex items-start justify-between gap-4 px-2 py-4 transition-colors hover:bg-sheet focus-visible:outline-2 focus-visible:outline-pencil"
+                className="flex items-start justify-between gap-4 p-4 focus-visible:outline-2 focus-visible:outline-pencil sm:p-5"
             >
                 <div className="min-w-0">
-                    <h2 className="truncate font-medium">{doubt.title}</h2>
+                    <h2 className="truncate font-semibold">{doubt.title}</h2>
                     <p className="mt-0.5 text-sm text-graphite">
                         {doubt.topic} in {doubt.course}, asked {date}
                     </p>

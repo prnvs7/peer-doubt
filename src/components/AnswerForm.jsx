@@ -29,6 +29,7 @@ export default function AnswerForm({ doubtId }) {
             {error && <p role="alert" className="text-sm text-margin">{error}</p>}
             <textarea id="answer" className="field h-52 font-serif text-base leading-relaxed"
                 placeholder="Explain it step by step, as you would to a friend."
+                minLength={10} maxLength={10000}
                 value={body} onChange={(e) => setBody(e.target.value)} required />
             <button className="btn" disabled={loading}>{loading ? 'Posting...' : 'Post answer'}</button>
         </form>

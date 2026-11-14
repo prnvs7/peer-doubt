@@ -18,9 +18,19 @@ export async function proxy(req) {
         return NextResponse.redirect(new URL('/doubts/mine', req.url));
     }
 
+    if (pathname.startsWith('/admin') && !token.roles?.includes('admin')) {
+        return NextResponse.redirect(new URL('/doubts/mine', req.url));
+    }
+
+    const canOpenHelperProfile =
+        pathname === '/helper/profile' && token.roles?.includes('student');
+    if (pathname.startsWith('/helper') && !token.roles?.includes('helper') && !canOpenHelperProfile) {
+        return NextResponse.redirect(new URL('/doubts/mine', req.url));
+    }
+
     return NextResponse.next();
 }
 
 export const config = {
-    matcher: ['/doubts/:path*', '/helper/:path*', '/moderation/:path*'],
+    matcher: ['/doubts/:path*', '/helper/:path*', '/moderation/:path*', '/knowledge/:path*', '/notifications/:path*', '/admin/:path*'],
 };
