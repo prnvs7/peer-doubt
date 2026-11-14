@@ -1,4 +1,4 @@
-export default function AuthShell({ title, hint, eyebrow = 'P23 · Stuck at Question Three', callout, children, footer }) {
+export default function AuthShell({ title, hint, eyebrow = 'unStuck · Stuck at Question Three', callout, children, footer }) {
     return (
         <div className="mx-auto mt-0 max-w-md">
             <div className="margin-sheet rounded-md border border-rule border-t-4 border-t-marker bg-sheet px-6 py-8 shadow-[var(--ui-shadow)] sm:py-9 sm:pl-16 sm:pr-8">

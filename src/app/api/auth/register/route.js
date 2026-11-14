@@ -22,13 +22,14 @@ export async function POST(req) {
             return Response.json({ msg: parsed.error.issues[0].message }, { status: 400 });
 
         const { name, email, password } = parsed.data;
+        const normalizedEmail = email.trim().toLowerCase();
         await connectDB();
 
-        if (await User.findOne({ email }))
+        if (await User.findOne({ email: normalizedEmail }))
             return Response.json({ msg: 'Email already registered' }, { status: 409 });
 
         const passwordHash = await bcrypt.hash(password, 10);
-        await User.create({ name, email, passwordHash });
+        await User.create({ name, email: normalizedEmail, passwordHash });
         return Response.json({ msg: 'Registered' }, { status: 201 });
     } catch (err) {
         if (err?.code === 11000)

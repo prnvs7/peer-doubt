@@ -17,7 +17,7 @@ const MAP = {
 export default function StatusBadge({ status }) {
     const s = MAP[status] ?? MAP.OPEN;
     return (
-        <span className={`inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${s.cls}`}>
+        <span data-status={status} className={`status-badge inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${s.cls}`}>
             {status === 'VERIFIED' && (
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
                     <path d="M2 6.5l2.5 2.5L10 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />

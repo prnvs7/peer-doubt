@@ -81,7 +81,7 @@ export default function HelperWorkspace() {
 
     return <div className="space-y-7">
         <header className="flex flex-wrap items-end justify-between gap-3">
-            <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-pencil">Peer helper workspace</p><h1 className="mt-1 text-2xl font-bold tracking-tight">Help a classmate get unstuck</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-graphite">Claim one open question, explain your reasoning, and send it to a CR or faculty member for review.</p></div>
+            <div><p className="eyebrow-gradient text-xs font-bold uppercase tracking-[0.16em]">unStuck helper workspace</p><h1 className="display-heading-gradient mt-1 text-2xl font-bold tracking-tight">Help a classmate get unstuck</h1><p className="mt-2 max-w-2xl text-sm leading-6 text-graphite">Claim one open question, explain your reasoning, and send it to a CR or faculty member for review.</p></div>
             <button type="button" className="btn-quiet" onClick={load}>Refresh</button>
         </header>
         {message && <p className="rounded-xl border border-verified/30 bg-verified/10 p-3 text-sm text-verified" role="status">{message}</p>}
@@ -101,9 +101,9 @@ export default function HelperWorkspace() {
             <div><h2 className="text-lg font-bold">Your claimed questions</h2><p className="mt-1 text-sm text-graphite">Answers stay attached to the original doubt for moderation.</p></div>
             {loading && <div className="card h-32 animate-pulse" aria-label="Loading claimed questions" />}
             {!loading && assigned.length === 0 && <div className="card p-5 text-sm text-graphite">You have no active claims. Choose an open question below to begin.</div>}
-            {!loading && assigned.map((doubt) => <article key={doubt._id} className="card space-y-4 p-4 sm:p-5">
+            {!loading && assigned.map((doubt) => <article key={doubt._id} className="card workspace-item-card space-y-4 p-4 sm:p-5">
                 <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-xs font-semibold text-pencil">{doubt.course} · {doubt.topic} · by {doubt.author?.name || 'Student'}</p><h3 className="mt-1 text-lg font-bold">{doubt.title}</h3><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-graphite">{doubt.description}</p></div><StatusBadge status={doubt.status} /></div>
-                {doubt.myAnswer && <div className="rounded-xl bg-paper p-4"><div className="flex flex-wrap items-center gap-2"><p className="text-xs font-bold uppercase tracking-wide text-graphite">Your latest answer</p><StatusBadge status={doubt.myAnswer.status} /></div>{doubt.myAnswer.flaggedForReview ? <p className="mt-2 text-sm text-graphite">This answer is hidden while the moderation team reviews a report.</p> : <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{doubt.myAnswer.content}</p>}</div>}
+                {doubt.myAnswer && <div className="inner-answer-card rounded-xl p-4"><div className="flex flex-wrap items-center gap-2"><p className="text-xs font-bold uppercase tracking-wide text-graphite">Your latest answer</p><StatusBadge status={doubt.myAnswer.status} /></div>{doubt.myAnswer.flaggedForReview ? <p className="mt-2 text-sm text-graphite">This answer is hidden while the moderation team reviews a report.</p> : <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{doubt.myAnswer.content}</p>}</div>}
                 {(doubt.status === 'CLAIMED' || doubt.myAnswer?.status === 'REVISION_REQUESTED') && <form className="space-y-3 border-t border-rule pt-4" onSubmit={(event) => submitAnswer(event, doubt._id)}>
                     {doubt.myAnswer?.status === 'REVISION_REQUESTED' && <p className="rounded-lg bg-marker/30 p-3 text-sm">Revision requested: {doubt.myAnswer.moderationHistory?.at(-1)?.reason || 'Please improve this answer.'}</p>}
                     <label className="block space-y-1.5 text-sm font-semibold">{doubt.myAnswer?.status === 'REVISION_REQUESTED' ? 'Revise your explanation' : 'Your explanation'}<textarea className="field min-h-32 resize-y" minLength={10} maxLength={10000} required value={answers[doubt._id] ?? (doubt.myAnswer?.status === 'REVISION_REQUESTED' ? doubt.myAnswer.content : '')} onChange={(event) => setAnswers((current) => ({ ...current, [doubt._id]: event.target.value }))} placeholder="Explain the idea step by step. Include what makes the answer correct." /></label>
@@ -117,7 +117,7 @@ export default function HelperWorkspace() {
         <section className="space-y-3">
             <div><h2 className="text-lg font-bold">Open questions</h2><p className="mt-1 text-sm text-graphite">A claim is reserved for you so two helpers do not answer the same question at once.</p></div>
             {!loading && available.length === 0 && <div className="card p-5 text-sm text-graphite">No open questions are waiting right now.</div>}
-            {!loading && available.map((doubt) => <article key={doubt._id} className="card space-y-4 p-4 sm:p-5">
+            {!loading && available.map((doubt) => <article key={doubt._id} className="card workspace-item-card space-y-4 p-4 sm:p-5">
                 <div><p className="text-xs font-semibold text-pencil">{doubt.course} · {doubt.topic} · by {doubt.author?.name || 'Student'}</p><h3 className="mt-1 text-lg font-bold">{doubt.title}</h3><p className="mt-2 whitespace-pre-wrap text-sm leading-6 text-graphite">{doubt.description}</p></div>
                 <div className="flex flex-wrap items-center justify-between gap-3"><Link href={`/doubts/${doubt._id}`} className="text-sm font-semibold text-pencil hover:underline">Open doubt</Link><button type="button" className="btn-primary" disabled={!!busy} onClick={() => claim(doubt._id)}>{busy === doubt._id ? 'Claiming…' : 'Claim this doubt'}</button></div>
             </article>)}

@@ -4,8 +4,8 @@ import Providers from '@/components/Providers';
 import Navbar from '@/components/Navbar';
 
 export const metadata = {
-    title: { default: 'Peer Doubt · Stuck at Question Three', template: '%s · Peer Doubt' },
-    description: 'A clearer place for students to ask, explain and preserve class knowledge.',
+    title: { default: 'unStuck · Stuck at Question Three', template: '%s · unStuck' },
+    description: 'unStuck gives students a clearer place to ask, explain and preserve class knowledge.',
 };
 
 export default function RootLayout({ children }) {
@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
         <html lang="en" suppressHydrationWarning>
             <head>
                 <script dangerouslySetInnerHTML={{
-                    __html: "try{var t=localStorage.getItem('peer-doubt-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}",
+                    __html: "try{var t=localStorage.getItem('unstuck-theme');document.documentElement.dataset.theme=t||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}catch(e){}",
                 }} />
             </head>
             <body className="font-sans antialiased">

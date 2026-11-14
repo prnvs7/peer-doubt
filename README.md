@@ -1,6 +1,6 @@
-# Peer Doubt P23
+# unStuck
 
-Peer Doubt is a Next.js App Router application for student questions, peer explanations, moderator verification, and searchable class knowledge. It uses Next.js 16, React 19, NextAuth credentials sessions, MongoDB/Mongoose, Zod, and Tailwind CSS 4.
+unStuck is a Next.js App Router application for student questions, peer explanations, moderator verification, and searchable class knowledge. It uses Next.js 16, React 19, NextAuth credentials sessions, MongoDB/Mongoose, Zod, and Tailwind CSS 4.
 
 ## Development setup
 
@@ -16,7 +16,7 @@ The application selects the existing Atlas database `Doubt`; `MONGODB_DB` takes 
 
 Use a dedicated application database user scoped to `readWrite` on `Doubt`; do not put an Atlas administrator credential in app configuration. The application code cannot change Atlas user roles. Add each developer's current IP to Atlas Network Access; do not use unrestricted public access as the default. Percent-encode special characters in the URI username and password. Never use Atlas credentials as application login credentials.
 
-Public registration creates student accounts only. Students opt into the helper role by selecting at least one course and enabling availability from **Become a helper**. This only grants access to the peer helper workspace; CR and faculty roles must still be provisioned by an authorized administrator using the existing `roles` field. Do not share an administrator password between developers. Each person signs into the app with their own application account.
+Public registration creates student accounts only. Students opt into the helper role by selecting at least one course and enabling availability from **Become a helper**. This only grants access to the helper workspace; CR and faculty roles must still be provisioned by an authorized administrator using the existing `roles` field. Do not share an administrator password between developers. Each person signs into the app with their own application account.
 
 Useful checks:
 

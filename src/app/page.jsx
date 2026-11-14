@@ -84,7 +84,7 @@ async function LandingContent() {
                             Stuck at <span className="headline-mark">2 a.m.?</span> Someone in your class <span className="headline-accent">already got it.</span>
                         </h1>
                         <p className="mt-6 max-w-lg text-lg leading-relaxed text-graphite">
-                            Peer Doubt gives your class one place to ask doubts, find classmates who can explain them,
+                            unStuck gives your class one place to ask doubts, find classmates who can explain them,
                             and keep every verified answer for the next person who gets stuck.
                         </p>
                         <div className="mt-8 flex flex-wrap gap-3">
@@ -131,7 +131,7 @@ async function LandingContent() {
             <section className="border-y border-rule bg-sheet">
                 <div className="mx-auto max-w-5xl px-5 py-16">
                     <h2 className="max-w-2xl text-3xl font-semibold tracking-tight">
-                        Class groups bury questions. Peer Doubt keeps them.
+                        Class groups bury questions. unStuck keeps them.
                     </h2>
                     <dl className="mt-10 border-t border-rule">
                         {PROBLEMS.map((p) => (
@@ -223,7 +223,7 @@ async function LandingContent() {
 
             <footer className="border-t border-rule bg-sheet">
                 <div className="mx-auto max-w-5xl px-5 py-6 text-sm text-graphite">
-                    Peer Doubt. Class doubts, answered by classmates and checked by your CR.
+                    unStuck. Class doubts, answered by classmates and checked by your CR.
                 </div>
             </footer>
         </>
@@ -231,5 +231,5 @@ async function LandingContent() {
 }
 
 export default function Landing() {
-    return <Suspense fallback={<div className="min-h-[60vh] animate-pulse bg-sheet" aria-label="Loading Peer Doubt" />}><LandingContent /></Suspense>;
+    return <Suspense fallback={<div className="min-h-[60vh] animate-pulse bg-sheet" aria-label="Loading unStuck" />}><LandingContent /></Suspense>;
 }

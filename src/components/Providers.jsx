@@ -13,7 +13,7 @@ export default function Providers({ children }) {
 
     useEffect(() => {
         let active = true;
-        const saved = localStorage.getItem('peer-doubt-theme');
+        const saved = localStorage.getItem('unstuck-theme');
         const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         const initial = saved || document.documentElement.dataset.theme || preferred;
         document.documentElement.dataset.theme = initial;
@@ -26,7 +26,7 @@ export default function Providers({ children }) {
         toggleTheme() {
             setTheme((current) => {
                 const next = current === 'dark' ? 'light' : 'dark';
-                localStorage.setItem('peer-doubt-theme', next);
+                localStorage.setItem('unstuck-theme', next);
                 document.documentElement.dataset.theme = next;
                 return next;
             });

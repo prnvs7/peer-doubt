@@ -80,7 +80,7 @@ async function main() {
         if (!names.length) throw new Error('sample_mflix is already empty; nothing was backed up.');
 
         const stamp = new Date().toISOString().replace(/[:.]/g, '-');
-        const root = join(tmpdir(), 'peer-doubt-atlas-backups');
+        const root = join(tmpdir(), 'unstuck-atlas-backups');
         backupDirectory = join(root, `${DATABASE}_${stamp}`);
         await mkdir(backupDirectory, { recursive: true, mode: 0o700 });
 

@@ -7,7 +7,7 @@ export default function DoubtCard({ doubt }) {
     });
 
     return (
-        <li className="card overflow-hidden transition hover:border-pencil/50 hover:shadow-sm">
+        <li className="card doubt-card overflow-hidden transition hover:border-pencil/50 hover:shadow-sm">
             <Link
                 href={`/doubts/${doubt._id}`}
                 className="flex items-start justify-between gap-4 p-4 focus-visible:outline-2 focus-visible:outline-pencil sm:p-5"
