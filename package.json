@@ -1,34 +1,16 @@
 {
-  "name": "unstuck",
-  "version": "0.1.0",
+  "name": "p23-backend",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build --webpack",
-    "start": "next start",
-    "lint": "eslint",
-    "test": "node --test",
-    "db:init": "node --env-file=.env.local scripts/initialize-database.mjs",
-    "db:verify:module3": "node --env-file=.env.local scripts/verify-module3-persistence.mjs",
-    "db:backup:sample": "node --env-file=.env.local scripts/backup-atlas-sample-mflix.mjs --confirm-backup",
-    "db:drop:sample": "node --env-file=.env.local scripts/drop-sample-mflix.mjs",
-    "seed:dev": "node --env-file=.env.local scripts/seed-development.mjs",
-    "cleanup:dev": "node --env-file=.env.local scripts/cleanup-development.mjs"
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start -p 3000"
   },
   "dependencies": {
-    "bcryptjs": "^3.0.3",
-    "mongoose": "^9.12.1",
-    "next": "16.4.6",
-    "next-auth": "^4.24.15",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "zod": "^4.6.7"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.5",
-    "@tailwindcss/turbopack": "4.3.3",
-    "eslint": "^9",
-    "eslint-config-next": "16.4.6",
-    "tailwindcss": "^4.3.3"
+    "next": "^15.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.23.8"
   }
 }
