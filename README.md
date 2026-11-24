@@ -165,3 +165,5 @@ The light/dark palette is defined by CSS variables in `src/app/globals.css`. The
 - `npm run build`: passed.
 - Unauthenticated production API checks returned 401 for auth/me, knowledge, moderation queue/stats, answer verify/reject, reports, admin users, and notifications.
 - Signed-in per-role HTTP/browser walkthrough was not run. This local environment has no `RBAC_TEST_PASSWORD` and no `MONGODB_DNS_SERVERS` override, so the prefixed account seed was not run and no database records were changed.
+- 
+https://peer-doubt-rouge.vercel.app/
